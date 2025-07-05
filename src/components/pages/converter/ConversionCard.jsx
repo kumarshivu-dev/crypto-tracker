@@ -1,8 +1,43 @@
 "use client";
-
-import React from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const ConversionCard = () => {
+  // React-state management
+  const [isLoading, setIsLoading] = useState(false);
+  const [currencies, setCurrencies] = useState([]);
+
+  const [amount, setAmount] = useState(1);
+  const [fromCurrency, setFromCurrency] = useState(null);
+  const [toCurrency, setToCurrency] = useState(null);
+  const [conversionResult, setConversionResult] = useState(null);
+
+  useEffect(() => {
+    // Fetch all crypto currency list
+    const fetchCurrenciesList = async () => {
+      try {
+        const response = await fetch("/api/cryptocurrency/map");
+
+        if (!response.ok) {
+          throw new Error("Failed to load currencies");
+        }
+
+        const responseData = await response.json();
+
+        if (responseData?.data?.length >= 2) {
+          setFromCurrency(responseData.data[0]);
+          setToCurrency(responseData.data[1]);
+        }
+
+        setCurrencies(responseData?.data || []);
+      } catch (error) {
+        toast.error(error.message || "Failed to load currency list.");
+      }
+    };
+
+    fetchCurrenciesList();
+  }, []);
+
   return (
     <div className="flex items-center justify-center text-white w-full">
       <div className="bg-[#1a1d24] p-6 rounded-lg shadow-lg w-full max-w-2xl space-y-6">
