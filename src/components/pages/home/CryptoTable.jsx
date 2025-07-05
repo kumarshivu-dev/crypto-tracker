@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import styles from "@/styles/CryptoTable.module.css";
 
 import TableSkeleton from "@/components/common/TableSkeleton";
 
@@ -65,7 +66,7 @@ const CryptoTable = () => {
           <img
             src={info.getValue()}
             alt="logo"
-            className="w-6 h-6 rounded-full"
+            className={`w-6 h-6 rounded-full ${styles.logoHover}`}
           />
         ),
         enableSorting: false,
@@ -171,7 +172,10 @@ const CryptoTable = () => {
                   </tr>
                 ) : (
                   table.getRowModel().rows.map((row) => (
-                    <tr key={row.id} className="hover:bg-gray-800">
+                    <tr
+                      key={row.id}
+                      className={`hover:bg-gray-800 ${styles.rowFade}`}
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
