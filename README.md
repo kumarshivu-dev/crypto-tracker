@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Crypto-Tracker — Cryptocurrency Tracker & Converter
 
-## Getting Started
+**crypto-tracker** is a mobile-first, responsive cryptocurrency tracking and conversion app. It provides live market data using the [CoinMarketCap API](https://coinmarketcap.com/api/), including price movements, trends, and real-time crypto-to-crypto conversions.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+
+| Layer         | Tech Used                            | Purpose                       |
+| ------------- | ------------------------------------ | ----------------------------- |
+| Frontend      | Next.js (App Router) + TailwindCSS   | SPA UI & routing              |
+| API Layer     | Next.js API Routes (Proxy Layer)     | Secures CoinMarketCap API key |
+| Data Fetching | `fetch`                              | Realtime updates              |
+| State Mgmt    | Local `useState` + controlled inputs | Lightweight for current scope |
+| UI Libraries  | TanStack Table, Lucide React         | Table rendering & icons       |
+| Animation     | CSS transitions + loading spinner    | Smooth UX                     |
+| Notifications | `react-hot-toast`                    | Error/success toasts          |
+
+---
+
+## Why This Architecture?
+
+- **Next.js App Router**: Simplifies routing, layouts, and API route co-location. Great for performance and future SSR.
+- **API Proxy (Backend for Frontend)**: Prevents API key exposure on the client side and enables centralized error handling and caching logic.
+- **Modular Design**: Components are reusable, small in scope, and easy to test/maintain.
+- **Mobile-first + TailwindCSS**: Guarantees responsiveness from the start.
+- **Minimal Dependencies**: Keeps the bundle small, aiding performance and maintainability.
+
+---
+
+## Features
+
+### Homepage
+
+- Real-time list of top cryptocurrencies
+- Displays:
+  - Coin name & symbol
+  - Coin logo
+  - Current market price
+  - 24-hour and 7-day percentage change (with color coding)
+- Pagination support
+- Skeleton loader animation while data loads
+
+### Crypto Converter
+
+- Convert one cryptocurrency to another
+- Fetches live conversion rate from CoinMarketCap
+- Error handling for empty or invalid inputs
+
+---
+
+## 🧱 Architecture Overview
+
+The app follows a clean, modular structure using **Next.js App Router** with API routes for secure backend proxying.
+
+### Key Decisions:
+
+- **API Key Security**: CoinMarketCap API is accessed via serverless API routes in `/app/api/` to prevent exposing the key.
+- **Performance**: Mobile-first design with Tailwind ensures speed and responsiveness.
+- **Scalability**: Component-driven UI with reusable logic and clear state management.
+- **Maintainability**: Logic is separated into hooks, utils, and components for clean and extendable code.
+
+---
+
+## Animations
+
+- **CSS-based skeleton loader** for table loading
+- Hover transitions for table rows and converter form
+- Toast notifications for errors and conversions
+
+---
+
+## Deployment
+
+Deploy easily using [Vercel](https://vercel.com/):
+
+1. Push your code to GitHub
+2. Import repo in Vercel
+3. Add your environment variable:
+
+```
+NEXT_PUBLIC_CMC_BASE_URL = BASE_URL
+NEXT_PUBLIC_CMC_API_KEY = YOUR_API_KEY
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Click **Deploy**
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Documentation Files
 
-## Learn More
+- [`setup.md`](./setup.md) — Step-by-step local & deployment setup
+- [`assumptions.md`](./assumptions.md) — Project assumptions
+- [`todo.md`](./todo.md) — Pending improvements
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Acknowledgements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [CoinMarketCap API](https://coinmarketcap.com/api/)
+- [Next.js](https://nextjs.org/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Lucide Icons](https://lucide.dev/)
+- [TanStack Table](https://tanstack.com/table)
+- [React Hot Toast](https://react-hot-toast.com/)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
