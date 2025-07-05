@@ -189,6 +189,59 @@ const CryptoTable = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls  */}
+          {cryptoData?.length > 0 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between mt-6 text-sm text-gray-400 gap-4">
+              <div>
+                Showing {pageIndex * pageSize + 1} -{" "}
+                {Math.min((pageIndex + 1) * pageSize, totalCount)} of{" "}
+                {totalCount} (Page {pageIndex + 1} of {totalPages})
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  disabled={pageIndex === 0}
+                  onClick={() => setPageIndex((prev) => Math.max(0, prev - 1))}
+                  className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  aria-label="Previous Page"
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={pageIndex >= totalPages - 1}
+                  onClick={() =>
+                    setPageIndex((prev) => Math.min(totalPages - 1, prev + 1))
+                  }
+                  className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  aria-label="Next Page"
+                >
+                  Next
+                </button>
+              </div>
+
+              <div>
+                <label htmlFor="pageSize" className="sr-only">
+                  Select page size
+                </label>
+                <select
+                  id="pageSize"
+                  className="bg-gray-800 text-white px-4 py-2 rounded border border-gray-600 cursor-pointer"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageIndex(0);
+                    setPageSize(Number(e.target.value));
+                  }}
+                >
+                  {[10, 25, 50, 100].map((size) => (
+                    <option key={size} value={size}>
+                      Show {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
         </>
       )}
     </>
