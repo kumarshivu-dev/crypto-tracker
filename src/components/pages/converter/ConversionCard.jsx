@@ -39,6 +39,43 @@ const ConversionCard = () => {
     setConversionResult(null);
   };
 
+  // Fetch the latest conversion rate based on selected currencies and amount
+  const fetchConversionRate = async () => {
+    // Validate input amount
+    if (!amount || amount < 0) {
+      toast.error("Please enter valid amount.");
+      return;
+    }
+
+    // Ensure both currencies are selected
+    if (!fromCurrency || !toCurrency) {
+      toast.error("Please select both currencies.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `/api/tools/price-conversion?amount=${amount}&id=${fromCurrency.id}&convert=${toCurrency.symbol}`
+      );
+
+      if (!response.ok) throw new Error("Conversion failed.");
+
+      const responseData = await response.json();
+
+      const convertedValue =
+        responseData?.data?.quote?.[toCurrency.symbol]?.price;
+
+      if (!convertedValue) throw new Error("Conversion rate not found.");
+
+      setConversionResult(convertedValue);
+    } catch (error) {
+      toast.error(error.message || "Failed to fetch conversion rate.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Fetch all crypto currency list
     const fetchCurrenciesList = async () => {
@@ -149,10 +186,27 @@ const ConversionCard = () => {
           </div>
         </div>
 
+        {/* Conversion Result  */}
+        {conversionResult !== null && !isLoading && (
+          <div className="text-center text-lg mt-4">
+            {amount} {fromCurrency.name} ({fromCurrency.symbol}) ={" "}
+            <span className="font-semibold">
+              {conversionResult.toLocaleString(undefined, {
+                maximumFractionDigits: 6,
+              })}{" "}
+              {toCurrency.name} ({toCurrency.symbol})
+            </span>
+          </div>
+        )}
+
         {/* Button to fetch conversion rate */}
         <div className="flex justify-center">
-          <button className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-md mt-4 disabled:opacity-50 cursor-pointer">
-            Get Exchange Rate
+          <button
+            onClick={fetchConversionRate}
+            disabled={isLoading || currencies.length <= 0}
+            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-md mt-4 disabled:opacity-50 cursor-pointer"
+          >
+            {isLoading ? "Fetching..." : "Get Exchange Rate"}
           </button>
         </div>
       </div>
